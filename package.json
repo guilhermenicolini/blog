@@ -4,7 +4,8 @@
   "description": "Official guilhermenicolini.com.br Blog",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/guilhermenicolini/blog/issues"
   },
-  "homepage": "https://github.com/guilhermenicolini/blog#readme"
+  "homepage": "https://github.com/guilhermenicolini/blog#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^5.0.4",
+    "husky": "^8.0.3"
+  }
 }
