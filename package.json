@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "check-update": "ncu --color --interactive",
+    "check": "npm run check-update && npm i"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   "homepage": "https://github.com/guilhermenicolini/blog#readme",
   "devDependencies": {
     "git-commit-msg-linter": "^5.0.4",
-    "husky": "^8.0.3"
+    "husky": "^8.0.3",
+    "npm-check-updates": "^16.10.13"
   }
 }
