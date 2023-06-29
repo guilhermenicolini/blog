@@ -1,0 +1,16 @@
+{
+  "overrides": [{
+    "files": ["*.astro"],
+    "plugins": ["@typescript-eslint"],
+    "extends": ["plugin:astro/recommended"],
+    "parser": "astro-eslint-parser",
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser",
+      "project": "./tsconfig.json",
+      "extraFileExtensions": [".astro"]
+    },
+    "globals": {
+      "Astro": "readonly"
+    }
+  }]
+}
