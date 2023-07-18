@@ -1,19 +1,22 @@
 ---
 import '@/styles/normalize.css'
-// Welcome to Astro! Everything between these triple-dash code fences
-// is your "component frontmatter". It never runs in the browser.
-console.log('This runs in your terminal, not the browser!')
+import '@/styles/theme.css'
+import '@/styles/blog.css'
+
+import BaseHead from '@/components/BaseHead.astro'
+import BlogHeader from '@/components/BlogHeader.astro'
+
+const title = 'Guilherme Nicolini Blog'
+const description = 'Guilherme Nicolini Blog'
+const url = '/'
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <BaseHead {title} {description} {url} />
 </head>
 <body>
-  <div>
-    <p>Hello World!</p>
-  </div>
+  <BlogHeader {title} {url} />
 </body>
 </html>

@@ -1,0 +1,18 @@
+:root {
+  --font-family: 'IBM Plex Sans', Helvetica, Arial, sans-serif;
+
+  --color-white: #fff;
+  --color-black: #333333;
+}
+
+:root {
+  color-scheme: light;
+  --text-color: var(--color-black);
+  --background-color: var(--color-white);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text-color: var(--color-white);
+  --background-color: var(--color-black);
+}
