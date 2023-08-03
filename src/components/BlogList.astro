@@ -1,0 +1,19 @@
+---
+import BlogSearch from '@/components/BlogSearch.astro'
+import BlogTags from '@/components/BlogTags.astro'
+import BlogPreview from '@/components/BlogPreview.astro'
+
+const { allPosts } = Astro.props
+
+---
+<div class="s-content">
+  <div class="row">
+    <div id="sidebar" class="s-content__sidebar large-12 column">
+      <BlogSearch />
+      <BlogTags />
+    </div>
+    <div id="main" class="s-content__main large-12 column">
+      { allPosts.map(({ title, tags, date, url, description }: any) => <BlogPreview {title} {tags} {date} {url} {description} />) }
+    </div>
+  </div>
+</div>

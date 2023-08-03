@@ -5,11 +5,30 @@ import '@/styles/reset.css'
 import '@/styles/blog.css'
 
 import BaseHead from '@/components/BaseHead.astro'
-import BlogHeader from '@/components/BlogHeader.astro'
+import BlogWidgets from '@/components/BlogWidgets.astro'
+import BlogList from '@/components/BlogList.astro'
 
 const title = 'Guilherme Nicolini Blog'
 const description = 'Guilherme Nicolini Blog'
-const url = '/'
+const url = 'https://guilhermenicolini.com.br'
+
+interface MarkdownFrontmatter {
+  date: number
+  title: string
+  description: string
+  tags: string[]
+}
+
+const allMarkdownPosts = await Astro.glob<MarkdownFrontmatter>('./**/*.mdx')
+const allPosts = allMarkdownPosts
+  .map(post => ({
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    tags: post.frontmatter.tags,
+    date: new Date(post.frontmatter.date),
+    url: post.url
+  }))
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf())
 ---
 
 <!DOCTYPE html>
@@ -17,7 +36,8 @@ const url = '/'
 <head>
   <BaseHead {title} {description} {url} />
 </head>
-<body id="top">
-  <BlogHeader {title} {url} />
+<body>
+  <BlogWidgets />
+  <BlogList allPosts={allPosts} />
 </body>
 </html>

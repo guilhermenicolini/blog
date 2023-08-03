@@ -1,0 +1,32 @@
+---
+const { title, description, tags, date, url } = Astro.props
+
+const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'UTC',
+  month: 'long',
+  year: 'numeric',
+  day: 'numeric'
+})
+
+---
+
+<article class="entry">
+  <header class="entry__header">
+      <h2 class="entry__title h1">
+          <a href="single.html" title="">{title}</a>
+      </h2>
+      <div class="entry__meta">
+          <ul>
+              <li>{dateFormatter.format(date)}</li>
+              <li>
+                { tags.map((tag: string, index: number) => <text>{tag}{index !== tags.length - 1 && ', ' }</text>) }
+              </li>
+          </ul>
+      </div>
+  </header>
+  <div class="entry__content">
+    <p>
+      { description } <a href={url} title="" rel="category tag">Leia mais</a>
+    </p>
+  </div>
+</article>
