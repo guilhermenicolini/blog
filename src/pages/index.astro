@@ -1,6 +1,7 @@
 ---
-import '@/styles/normalize.css'
 import '@/styles/theme.css'
+import '@/styles/normalize.css'
+import '@/styles/reset.css'
 import '@/styles/blog.css'
 
 import BaseHead from '@/components/BaseHead.astro'
@@ -16,7 +17,7 @@ const url = '/'
 <head>
   <BaseHead {title} {description} {url} />
 </head>
-<body>
+<body id="top">
   <BlogHeader {title} {url} />
 </body>
 </html>
