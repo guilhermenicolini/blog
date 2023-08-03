@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/guilhermenicolini/blog#readme",
   "devDependencies": {
+    "@astrojs/mdx": "^0.19.7",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "astro-eslint-parser": "^0.14.0",
