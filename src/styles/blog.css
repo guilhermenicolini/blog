@@ -41,3 +41,22 @@ a:focus {
   outline: 2px solid currentColor;
   outline-offset: 0.25em;
 }
+
+.content h1 {
+  font-size: clamp(2.488rem, 1.924rem + 1.41vw, 3.052rem);
+  margin-top: 3rem;
+}
+
+.content h2 {
+  font-size: clamp(2.074rem, 1.707rem + 0.9175vw, 2.441rem);
+  margin-top: 2rem;
+}
+
+.content h3 {
+  font-size: clamp(1.728rem, 1.503rem + 0.5625vw, 1.953rem);
+  margin-top: 1rem;
+}
+
+.content p {
+  margin-top: 1rem;
+}
