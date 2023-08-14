@@ -1,0 +1,70 @@
+---
+import BlogLabels from '@/components/BlogLabels.astro'
+
+export interface Props {
+  title: string
+  date: string
+  description: string
+  url: string
+  tags: string[]
+}
+
+const { title, date, description, tags, url } = Astro.props
+
+const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'UTC',
+  month: 'long',
+  year: 'numeric',
+  day: 'numeric'
+})
+
+---
+<article class="blog-post-header">
+  <header>
+    <h1 class="title">{title}</h1>
+    <p class="date">{dateFormatter.format(new Date(date))}</p>
+    <BlogLabels labels={tags} />
+  </header>
+  <p class="description">{description}</p>
+  <div class="content">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .blog-post-header {
+    padding-bottom: 2rem;
+  }
+
+  .blog-post-header header {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 1rem;
+    text-align: left;
+  }
+
+  .blog-post-header header .title {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--theme-text);
+  }
+
+  .blog-post-header header .date {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--theme-text-light);
+  }
+
+  .blog-post-header .description {
+    color: var(--theme-text-light);
+  }
+
+  .blog-post-header .labels {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.8em;
+  }
+</style>

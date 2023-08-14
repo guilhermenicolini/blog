@@ -1,0 +1,41 @@
+---
+import '@/styles/theme.css'
+import '@/styles/blog.css'
+import BaseHead from '@/components/BaseHead.astro'
+import BlogWidgets from '@/components/BlogWidgets.astro'
+import BlogPost from '@/components/BlogPost.astro'
+
+const { content } = Astro.props
+const {
+  title,
+  date,
+  description,
+  tags
+} = content
+const url = Astro.request.url
+---
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <BaseHead {title} {description} {url} />
+</head>
+<body>
+  <BlogWidgets />
+  <div class="wrapper">
+    <BlogPost {title} {date} {description} {tags} {url}>
+      <slot />
+    </BlogPost>
+  </div>
+</body>
+</html>
+
+<style>
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+    max-width: 100ch;
+  }
+</style>
