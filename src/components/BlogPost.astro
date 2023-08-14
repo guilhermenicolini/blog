@@ -9,7 +9,7 @@ export interface Props {
   tags: string[]
 }
 
-const { title, date, description, tags, url } = Astro.props
+const { title, date, description, tags } = Astro.props
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   timeZone: 'UTC',
