@@ -1,11 +1,27 @@
-<header class="s-header">
-    <div class="row">
-        <div class="s-header__content column">
-            <div class="s-header__brand">
-                <h1 class="s-header__logotext">
-                    <a href="/" title="">Guilherme Nicolini Blog</a>
-                </h1>
-            </div>
-        </div>
-    </div>
+<header class="header">
+  <h1 class="text">
+    <a href="/" title="">Guilherme Nicolini Blog</a>
+  </h1>
 </header>
+
+<style>
+  .header {
+    text-align: center;
+  }
+
+  .header::before {
+    z-index: 10;
+    content: '';
+    display: block;
+    height: 0.3em;
+    background-color: var(--theme-primary);
+    position: relative;
+    top: 0;
+    right: 0;
+  }
+
+  .text {
+    font-size: 3rem;
+    color: var(--theme-primary);
+  }
+</style>

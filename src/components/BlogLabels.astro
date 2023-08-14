@@ -1,0 +1,20 @@
+---
+import BlogLabel from '@/components/BlogLabel.astro'
+interface Props {
+  labels: string[]
+}
+
+const { labels } = Astro.props
+
+---
+<div class="labels">
+  { labels.map(label => <BlogLabel {label} />)}
+</div>
+
+<style>
+  .labels {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.8em;
+  }
+</style>

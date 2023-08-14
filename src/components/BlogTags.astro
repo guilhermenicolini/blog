@@ -1,11 +1,24 @@
-<div class="widget widget_tags">
-  <div class="tagcloud group">
-      <a href="#0">Corporate</a>
-      <a href="#0">Onepage</a>
-      <a href="#0">Agency</a>
-      <a href="#0">Multipurpose</a>
-      <a href="#0">Blog</a>
-      <a href="#0">Landing Page</a>
-      <a href="#0">Resume</a>
-  </div>
+---
+import BlogTag from '@/components/BlogTag.astro'
+import { TagModel } from '@/models'
+interface Props {
+  allTags: TagModel[]
+}
+
+const { allTags } = Astro.props
+const { tag: selected } = Astro.params
+
+const currentTag = allTags.find(tag => tag.slug === selected)
+if (currentTag != null) currentTag.selected = true
+---
+<div class="tags">
+  { allTags.map(tag => <BlogTag tag={tag} />)}
 </div>
+
+<style>
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.8em;
+  }
+</style>

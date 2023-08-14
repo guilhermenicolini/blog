@@ -3,6 +3,9 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "off"
+  },
   "overrides": [{
     "files": ["*.astro"],
     "plugins": [
@@ -19,7 +22,8 @@
       "extraFileExtensions": [".astro"]
     },
     "rules": {
-      "astro/semi": ["error", "never"]
+      "astro/semi": ["error", "never"],
+      "@typescript-eslint/consistent-type-imports": "off"
     },
     "globals": {
       "Astro": "readonly"

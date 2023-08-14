@@ -1,5 +1,5 @@
 :root {
-  --font-merriwather: 'Merriweather', Helvetica, Arial, sans-serif;
+  --font-body: 'Open Sans', Helvetica, Arial, sans-serif;
 
   --color-white: #fff;
   --color-black: #333333;
@@ -34,7 +34,7 @@
   --theme-text-light: var(--color-gray-600);
   --theme-background: var(--color-white);
   --theme-font: var(--font-merriwather);
-  --theme-primary: var(--color-green-500);
+  --theme-primary: var(--color-green-600);
   --theme-secondary: var(--color-purple-500);
   --theme-heading: var(--color-gray-600);
 }

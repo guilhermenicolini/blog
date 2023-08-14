@@ -1,19 +1,35 @@
 ---
-import BlogSearch from '@/components/BlogSearch.astro'
+import { PostModel } from '@/models'
 import BlogTags from '@/components/BlogTags.astro'
 import BlogPreview from '@/components/BlogPreview.astro'
+import { getTags } from '@/utils'
 
-const { allPosts } = Astro.props
+interface Props {
+  allPosts: PostModel[]
+  posts: PostModel[]
+}
 
+const { allPosts, posts } = Astro.props
+const tags = getTags(allPosts)
 ---
-<div class="s-content">
-  <div class="row">
-    <div id="sidebar" class="s-content__sidebar large-12 column">
-      <BlogSearch />
-      <BlogTags />
-    </div>
-    <div id="main" class="s-content__main large-12 column">
-      { allPosts.map(({ title, tags, date, url, description }: any) => <BlogPreview {title} {tags} {date} {url} {description} />) }
-    </div>
-  </div>
+<div class="wrapper">
+  <BlogTags allTags={tags} />
+  <section class="blog-list">
+    { posts.map(post => <BlogPreview {...post} />) }
+  </section>
 </div>
+
+<style>
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+    max-width: 100ch;
+  }
+
+  .blog-list {
+    margin-top: 5rem;
+  }
+</style>

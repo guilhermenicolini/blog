@@ -1,4 +1,5 @@
 ---
+import BlogLabels from '@/components/BlogLabels.astro'
 const { title, description, tags, date, url } = Astro.props
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
@@ -9,24 +10,52 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
 })
 
 ---
-
-<article class="entry">
-  <header class="entry__header">
-      <h2 class="entry__title h1">
-          <a href="single.html" title="">{title}</a>
-      </h2>
-      <div class="entry__meta">
-          <ul>
-              <li>{dateFormatter.format(date)}</li>
-              <li>
-                { tags.map((tag: string, index: number) => <text>{tag}{index !== tags.length - 1 && ', ' }</text>) }
-              </li>
-          </ul>
-      </div>
+<article class="blog-preview">
+  <header>
+    <a href={url}>
+      <h1 class="title">{title}</h1>
+    </a>
+    <p class="date">{dateFormatter.format(date)}</p>
+    <BlogLabels labels={tags} />
   </header>
-  <div class="entry__content">
-    <p>
-      { description } <a href={url} title="" rel="category tag">Leia mais</a>
-    </p>
-  </div>
+  <p class="description">{description}</p>
+  <a href={url}>Leia mais</a>
 </article>
+
+<style>
+  .blog-preview {
+    padding-bottom: 2rem;
+  }
+
+  .blog-preview header {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 1rem;
+    text-align: left;
+  }
+
+  .blog-preview header .title {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--theme-text);
+  }
+
+  .blog-preview header .date {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--theme-text-light);
+  }
+
+  .blog-preview .description {
+    color: var(--theme-text-light);
+  }
+
+  .blog-preview .labels {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.8em;
+  }
+</style>
