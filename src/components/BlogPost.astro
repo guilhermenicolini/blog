@@ -1,5 +1,6 @@
 ---
 import BlogLabels from '@/components/BlogLabels.astro'
+import { formatDate } from '@/utils'
 
 export interface Props {
   title: string
@@ -11,12 +12,7 @@ export interface Props {
 
 const { title, date, description, tags } = Astro.props
 
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  timeZone: 'UTC',
-  month: 'long',
-  year: 'numeric',
-  day: 'numeric'
-})
+const dateFormatter = formatDate(import.meta.env.LOCALE)
 
 ---
 <article class="blog-post-header">

@@ -1,9 +1,12 @@
 import { PostModel, TagModel } from '@/models'
-import { slugfy } from '@/utils'
+import { slugfy, getLanguage } from '@/utils'
 import { MDXInstance } from 'astro'
 
-export const getPosts = (posts: Array<MDXInstance<any>>): PostModel[] => {
-  const allPosts = posts.map<PostModel>((post: any) => ({
+export const getPosts = (posts: Array<MDXInstance<any>>, language: string = 'en-US'): PostModel[] => {
+  const lang = getLanguage(language)
+  const allPosts = posts
+    .filter((post: any) => post.frontmatter.language === lang)
+    .map<PostModel>((post: any) => ({
     title: post.frontmatter.title,
     description: post.frontmatter.description,
     tags: post.frontmatter.tags,

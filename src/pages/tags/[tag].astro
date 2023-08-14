@@ -15,7 +15,7 @@ interface Props {
 export async function getStaticPaths (): Promise<any> {
   const allMarkdownPosts = await Astro.glob<any>('../**/*.mdx')
 
-  const posts = getPosts(allMarkdownPosts)
+  const posts = getPosts(allMarkdownPosts, import.meta.env.LOCALE)
   const tags = getTags(posts).map(tag => ({
     params: { tag: tag.slug },
     props: { allPosts: posts, posts: posts.filter(post => post.tags.includes(tag.tag)) }

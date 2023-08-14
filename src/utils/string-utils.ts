@@ -8,3 +8,15 @@ export const slugfy = (value: string): string => {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
 }
+
+export const formatDate = (language: string = 'en-US'): Intl.DateTimeFormat => {
+  const lang = getLanguage(language)
+  return new Intl.DateTimeFormat(lang, {
+    timeZone: 'UTC',
+    month: 'long',
+    year: 'numeric',
+    day: 'numeric'
+  })
+}
+
+export const getLanguage = (language: string = 'en-US'): string => language === 'pt-BR' ? 'pt-BR' : 'en-US'

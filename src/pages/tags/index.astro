@@ -11,7 +11,7 @@ const description = 'Guilherme Nicolini Blog'
 const url = 'https://guilhermenicolini.com.br'
 
 const allMarkdownPosts = await Astro.glob<any>('../**/*.mdx')
-const posts = getPosts(allMarkdownPosts)
+const posts = getPosts(allMarkdownPosts, import.meta.env.LOCALE)
 ---
 
 <!DOCTYPE html>

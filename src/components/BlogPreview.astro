@@ -1,14 +1,11 @@
 ---
 import BlogLabels from '@/components/BlogLabels.astro'
+import { getLanguage, formatDate } from '@/utils'
+
 const { title, description, tags, date, url } = Astro.props
 
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  timeZone: 'UTC',
-  month: 'long',
-  year: 'numeric',
-  day: 'numeric'
-})
-
+const language = getLanguage(import.meta.env.LOCALE)
+const dateFormatter = formatDate(language)
 ---
 <article class="blog-preview">
   <header>
@@ -19,7 +16,7 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
     <BlogLabels labels={tags} />
   </header>
   <p class="description">{description}</p>
-  <a href={url}>Leia mais</a>
+  <a href={url}>{ language === 'pt-BR' ? 'Leia mais' : 'Read more' }</a>
 </article>
 
 <style>
