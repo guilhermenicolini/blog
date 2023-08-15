@@ -24,9 +24,9 @@ export async function getStaticPaths (): Promise<any> {
 const { tag } = Astro.params
 const { allPosts, posts } = Astro.props
 
-const title = `Tag:${tag as string} - Guilherme Nicolini Blog`
-const description = 'Guilherme Nicolini Blog'
-const url = 'https://guilhermenicolini.com.br'
+const title = `Tag:${tag as string} - Guilherme Nicolini`
+const description = 'Guilherme Nicolini'
+const url = import.meta.env.SITE
 ---
 <BlogLayout {title} {description} {url}>
   <BlogList allPosts={allPosts} posts={posts} />

@@ -4,9 +4,9 @@ import BlogList from '@/components/BlogList.astro'
 
 import { getPosts } from '@/utils'
 
-const title = 'Guilherme Nicolini Blog'
-const description = 'Guilherme Nicolini Blog'
-const url = 'https://guilhermenicolini.com.br'
+const title = 'Guilherme Nicolini'
+const description = 'Guilherme Nicolini'
+const url = import.meta.env.SITE
 
 const allMarkdownPosts = await Astro.glob<any>('./**/*.mdx')
 

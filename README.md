@@ -1,2 +1,2 @@
 # blog
-Official guilhermenicolini.com.br Blog
+Official guilhermenicolini Blog
