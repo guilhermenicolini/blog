@@ -1,5 +1,6 @@
 import { PostModel, TagModel } from '@/models'
-import { slugfy, getLanguage } from '@/utils'
+import { getLanguage } from '@/i18n/utils'
+import { slugfy } from '@/utils'
 import { MDXInstance } from 'astro'
 
 export const getPosts = (posts: Array<MDXInstance<any>>, language: string = 'en-US'): PostModel[] => {

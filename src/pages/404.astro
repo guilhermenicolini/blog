@@ -1,0 +1,62 @@
+---
+import BlogLayout from '@/layouts/BlogLayout.astro'
+import { useTranslations, getLanguage } from '@/i18n/utils'
+
+const title = 'Guilherme Nicolini'
+const description = 'Guilherme Nicolini'
+const url = import.meta.env.SITE
+
+const language = getLanguage(import.meta.env.LOCALE)
+const t = useTranslations(language)
+---
+<BlogLayout {title} {description} {url}>
+  <div class="wrapper">
+    <h1 class="header">{ t('404 - Not Found') }</h1>
+    <p class="message">{ t('We could not find the page you were looking for.') }</p>
+    <a class="back" href="/">{ t('Back To Home') }</a>
+  </div>
+</BlogLayout>
+
+<style>
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+    max-width: 100ch;
+    text-align: center;
+  }
+
+  .header {
+    margin-top: 2rem;
+    font-size: 5rem;
+    font-weight: normal;
+  }
+
+  .message {
+    margin-top: 1rem;
+    font-size: 2rem;
+  }
+
+  .back {
+    margin-top: 2rem;
+    display: inline-block;
+    background-color: transparent;
+    color: var(--theme-text);
+    border: 1px solid var(--theme-primary);
+    border-radius: 0.5rem;
+    transition: .15s ease-in-out;
+    cursor: pointer;
+    font-weight: 400;
+    text-underline-offset: 0.08em;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .back:hover {
+    text-decoration: none;
+    background-color: var(--theme-primary-light);
+    color: var(--theme-primary);
+  }
+</style>

@@ -21,11 +21,10 @@
   --color-green-400: hsl(96 75% 60%);
   --color-green-500: hsl(96 75% 50%);
   --color-green-600: hsl(96 75% 40%);
+  --color-green-600-hsl: 96, 75%, 40%;
   --color-green-700: hsl(96 75% 30%);
   --color-green-800: hsl(96 75% 17.5%);
   --color-green-900: hsl(96 75% 7.5%);
-
-  --color-purple-500: hsl(267, 63%, 55%);
 }
 
 :root {
@@ -35,6 +34,7 @@
   --theme-background: var(--color-white);
   --theme-font: var(--font-merriwather);
   --theme-primary: var(--color-green-600);
+  --theme-primary-light: hsla(var(--color-green-600-hsl), 0.1);
   --theme-secondary: var(--color-purple-500);
   --theme-heading: var(--color-gray-600);
   --theme-toggle-light: var(--color-gray-200);

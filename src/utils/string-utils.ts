@@ -1,3 +1,5 @@
+import { getLanguage } from '@/i18n/utils'
+
 export const slugfy = (value: string): string => {
   return (value)
     .normalize('NFKD')
@@ -19,4 +21,4 @@ export const formatDate = (language: string = 'en-US'): Intl.DateTimeFormat => {
   })
 }
 
-export const getLanguage = (language: string = 'en-US'): string => language === 'pt-BR' ? 'pt-BR' : 'en-US'
+// export const getLanguage = (language: string = 'en-US'): string => language === 'pt-BR' ? 'pt-BR' : 'en-US'
