@@ -1,0 +1,32 @@
+---
+import BlogLayout from '@/layouts/BlogLayout.astro'
+import BlogPost from '@/components/BlogPost.astro'
+
+const { content } = Astro.props
+const {
+  title,
+  date,
+  description,
+  tags
+} = content
+const url = Astro.request.url
+---
+
+<BlogLayout {title} {description} {url} >
+  <div class="wrapper">
+    <BlogPost {title} {date} {description} {tags} {url}>
+      <slot />
+    </BlogPost>
+  </div>
+</BlogLayout>
+
+<style>
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+    max-width: 100ch;
+  }
+</style>

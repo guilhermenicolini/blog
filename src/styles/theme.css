@@ -37,6 +37,8 @@
   --theme-primary: var(--color-green-600);
   --theme-secondary: var(--color-purple-500);
   --theme-heading: var(--color-gray-600);
+  --theme-toggle-background: var(--color-gray-800);
+  --theme-toggle-color: var(--color-gray-200);
 }
 
 :root[data-theme="dark"] {
@@ -44,4 +46,6 @@
   --theme-text: var(--color-white);
   --theme-text-light: var(--color-gray-200);
   --theme-background: var(--color-black);
+  --theme-toggle-background: var(--color-gray-200);
+  --theme-toggle-color: var(--color-gray-800);
 }

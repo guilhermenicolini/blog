@@ -1,10 +1,7 @@
 ---
-import '@/styles/theme.css'
-import '@/styles/blog.css'
 import { PostModel } from '@/models'
 import { getPosts, getTags } from '@/utils'
-import BaseHead from '@/components/BaseHead.astro'
-import BlogWidgets from '@/components/BlogWidgets.astro'
+import BlogLayout from '@/layouts/BlogLayout.astro'
 import BlogList from '@/components/BlogList.astro'
 
 interface Props {
@@ -31,14 +28,6 @@ const title = `Tag:${tag as string} - Guilherme Nicolini Blog`
 const description = 'Guilherme Nicolini Blog'
 const url = 'https://guilhermenicolini.com.br'
 ---
-
-<!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
-<head>
-  <BaseHead {title} {description} {url} />
-</head>
-<body>
-  <BlogWidgets />
+<BlogLayout {title} {description} {url}>
   <BlogList allPosts={allPosts} posts={posts} />
-</body>
-</html>
+</BlogLayout>

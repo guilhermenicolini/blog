@@ -2,6 +2,7 @@
   <h1 class="text">
     <a href="/" title="">Guilherme Nicolini Blog</a>
   </h1>
+  <button id="language"></button>
 </header>
 
 <style>
@@ -24,4 +25,26 @@
     font-size: 3rem;
     color: var(--theme-primary);
   }
+
+  #language {
+    position: fixed;
+    display: block;
+    top: 1rem;
+    right: 1rem;
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--theme-toggle-color);
+    background-color: var(--theme-toggle-background);
+    color: var(--theme-toggle-color);
+    cursor: pointer;
+  }
+
+  /* @media (prefers-color-scheme: dark) {
+    .#language {
+      border: 1px solid var(--theme-toggle-color);
+      background-color: var(--theme-toggle-background);
+      color: var(--theme-toggle-color);
+    }
+  } */
 </style>
