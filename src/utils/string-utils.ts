@@ -1,14 +1,18 @@
 import { getLanguage } from '@/i18n/utils'
 
 export const slugfy = (value: string): string => {
-  return (value)
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, '')
+  const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
+  const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+
+  return value.toString().toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(p, c => b.charAt(a.indexOf(c)))
+    .replace(/&/g, '-and-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
 }
 
 export const formatDate = (language: string = 'en-US'): Intl.DateTimeFormat => {
