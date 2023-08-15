@@ -2,6 +2,8 @@
 import '@/styles/theme.css'
 import '@/styles/blog.css'
 import BaseHead from '@/components/BaseHead.astro'
+import GoogleAnalytics from '@/components/GoogleAnalytics.astro'
+
 import BlogWidgets from '@/components/BlogWidgets.astro'
 import { getLanguage } from '@/utils'
 
@@ -12,6 +14,7 @@ interface Props {
 }
 
 const language = getLanguage(import.meta.env.LOCALE)
+const prod = import.meta.env.PROD
 
 const { title, description, url } = Astro.props
 ---
@@ -20,6 +23,7 @@ const { title, description, url } = Astro.props
 <html lang={language}>
 <head>
   <BaseHead {title} {description} {url} />
+  { prod && <GoogleAnalytics /> }
 </head>
 <body>
   <BlogWidgets />

@@ -1,0 +1,23 @@
+---
+import { getLanguage } from '@/utils'
+const language = getLanguage(import.meta.env.LOCALE)
+---
+<!-- Google tag (gtag.js) -->
+{ language === 'pt-BR' && <script async src="https://www.googletagmanager.com/gtag/js?id=G-R1K2VTJXM1"></script> }
+{ language === 'pt-BR' &&
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R1K2VTJXM1');
+  </script>
+}
+{ language === 'en-US' && <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYXCCR78FL"></script> }
+{ language === 'en-US' &&
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NYXCCR78FL');
+  </script>
+}
