@@ -30,8 +30,12 @@ const { title, description, url } = Astro.props
 <script>
   const theme = getTheme()
   const html = document.documentElement
+  const btnLight = document.getElementById('btn-light')
+  const btnDark = document.getElementById('btn-dark')
 
   html.setAttribute('data-theme', theme)
+  if (btnLight) btnLight.style.display = theme === 'dark' ? 'block' : 'none'
+  if (btnDark) btnDark.style.display = theme === 'dark' ? 'none' : 'block'
 
   function getTheme() {
     return localStorage.getItem('theme') ?? 'dark'
@@ -41,6 +45,8 @@ const { title, description, url } = Astro.props
   button?.addEventListener('click', () => {
     const toggleTo = getTheme() === 'dark' ? 'light' : 'dark'
     html.setAttribute('data-theme', toggleTo)
+    if (btnLight) btnLight.style.display = toggleTo === 'dark' ? 'block' : 'none'
+    if (btnDark) btnDark.style.display = toggleTo === 'dark' ? 'none' : 'block'
     localStorage.setItem('theme', toggleTo)
   })
 </script>

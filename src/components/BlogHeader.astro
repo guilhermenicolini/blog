@@ -2,7 +2,10 @@
   <h1 class="text">
     <a href="/" title="">Guilherme Nicolini Blog</a>
   </h1>
-  <button id="language"></button>
+  <div id="language">
+    <svg id="btn-dark" style="display: none;" viewBox="0 -6 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g transform="translate(-258.000000, -367.000000)"><path d="M280,383 C276.687,383 274,380.313 274,377 C274,373.687 276.687,371 280,371 C283.313,371 286,373.687 286,377 C286,380.313 283.313,383 280,383 L280,383 Z M280,367 L268,367 C262.477,367 258,371.478 258,377 C258,382.522 262.477,387 268,387 L280,387 C285.523,387 290,382.522 290,377 C290,371.478 285.523,367 280,367 L280,367 Z M280,373 C277.791,373 276,374.791 276,377 C276,379.209 277.791,381 280,381 C282.209,381 284,379.209 284,377 C284,374.791 282.209,373 280,373 L280,373 Z"></path></g></svg>
+    <svg id="btn-light" style="display: none;" viewBox="0 -6 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g transform="translate(-206.000000, -367.000000)"><path d="M216,383 C212.687,383 210,380.313 210,377 C210,373.687 212.687,371 216,371 C219.314,371 222,373.687 222,377 C222,380.313 219.314,383 216,383 L216,383 Z M228,367 L216,367 C210.477,367 206,371.478 206,377 C206,382.522 210.477,387 216,387 L228,387 C233.523,387 238,382.522 238,377 C238,371.478 233.523,367 228,367 L228,367 Z M216,373 C213.791,373 212,374.791 212,377 C212,379.209 213.791,381 216,381 C218.209,381 220,379.209 220,377 C220,374.791 218.209,373 216,373 L216,373 Z" id="toggle-on"></path></g></svg>
+  </div>
 </header>
 
 <style>
@@ -31,12 +34,20 @@
     display: block;
     top: 1rem;
     right: 1rem;
-    height: 22px;
-    width: 22px;
-    border-radius: 50%;
-    border: 1px solid var(--theme-toggle-color);
-    background-color: var(--theme-toggle-background);
-    color: var(--theme-toggle-color);
+    border: none;
+    background: none;
     cursor: pointer;
+  }
+
+  #language svg {
+    width: 30px;
+  }
+
+  #btn-light g {
+    fill: var(--theme-toggle-light);
+  }
+
+  #btn-dark g {
+    fill: var(--theme-toggle-dark);
   }
 </style>
