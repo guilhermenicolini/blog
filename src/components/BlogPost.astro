@@ -20,7 +20,7 @@ const dateFormatter = formatDate(import.meta.env.LOCALE)
   <header>
     <h1 class="title">{title}</h1>
     <p class="date">{dateFormatter.format(new Date(date))}</p>
-    <BlogLabels labels={tags} />
+    <BlogLabels labels={tags.sort((a, b) => a > b ? 1 : -1)} />
     { slugs !== undefined && <BlogLanguages {slugs} /> }
   </header>
   <p class="description">{description}</p>
