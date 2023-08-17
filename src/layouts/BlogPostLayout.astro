@@ -7,14 +7,15 @@ const {
   title,
   date,
   description,
-  tags
+  tags,
+  slugs
 } = content
 const url = Astro.request.url
 ---
 
 <BlogLayout {title} {description} {url} >
   <div class="wrapper">
-    <BlogPost {title} {date} {description} {tags} {url} >
+    <BlogPost {title} {date} {description} {tags} {url} {slugs} >
       <slot />
     </BlogPost>
   </div>

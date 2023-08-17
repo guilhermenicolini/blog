@@ -1,0 +1,26 @@
+---
+import { getUrl } from '@/i18n'
+interface Props {
+  slugs: Record<string, string>
+}
+const { slugs } = Astro.props
+---
+<div class="languages">
+  { Object.entries(slugs).map(([k, v]) => <a href=`${getUrl(import.meta.env.MODE, k)}/${v}`><img src=`/icons/${k}.svg` /></a>) }
+</div>
+
+<style>
+  .languages {
+    display: flex;
+    column-gap: 1rem;
+  }
+
+  .languages a {
+    width: 30px;
+    height: 23px;
+  }
+
+  /* .language a {
+    display: inline-block;
+  } */
+</style>

@@ -1,5 +1,6 @@
 ---
 import BlogLabels from '@/components/BlogLabels.astro'
+import BlogLanguages from '@/components/BlogLanguages.astro'
 import { formatDate } from '@/utils'
 
 export interface Props {
@@ -8,19 +9,19 @@ export interface Props {
   description: string
   url: string
   tags: string[]
+  slugs: Record<string, string>
 }
 
-const { title, date, description, tags, url } = Astro.props
+const { title, date, description, tags, slugs } = Astro.props
 
 const dateFormatter = formatDate(import.meta.env.LOCALE)
-
-console.log(import.meta.env.MODE, url)
 ---
 <article class="blog-post-header">
   <header>
     <h1 class="title">{title}</h1>
     <p class="date">{dateFormatter.format(new Date(date))}</p>
     <BlogLabels labels={tags} />
+    { slugs !== undefined && <BlogLanguages {slugs} /> }
   </header>
   <p class="description">{description}</p>
   <div class="content">

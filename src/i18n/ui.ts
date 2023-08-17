@@ -3,7 +3,13 @@ export const languages = {
   en: 'en'
 }
 
+export const environments = {
+  development: 'development',
+  production: 'production'
+}
+
 export const defaultLang = 'en'
+export const defaultEnv = 'development'
 
 export const ui = {
   pt: {
