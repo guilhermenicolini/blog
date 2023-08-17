@@ -3,6 +3,14 @@ import BlogLabels from '@/components/BlogLabels.astro'
 import { useTranslations, getLanguage } from '@/i18n'
 import { formatDate } from '@/utils'
 
+export interface Props {
+  title: string
+  date: Date
+  description: string
+  url: string
+  tags: string[]
+}
+
 const { title, description, tags, date, url } = Astro.props
 
 const language = getLanguage(import.meta.env.LOCALE)
@@ -17,7 +25,7 @@ const t = useTranslations(language)
       <h1 class="title">{title}</h1>
     </a>
     <p class="date">{dateFormatter.format(date)}</p>
-    <BlogLabels labels={tags} />
+    <BlogLabels labels={tags.sort((a, b) => a > b ? 1 : -1)} />
   </header>
   <p class="description">{description}</p>
   <a href={url}>{ t('Read more') }</a>
