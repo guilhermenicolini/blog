@@ -11,6 +11,7 @@ const url = import.meta.env.SITE
 const allMarkdownPosts = await Astro.glob<any>('./**/*.mdx')
 
 const allPosts = getPosts(allMarkdownPosts, import.meta.env.LOCALE)
+console.log(import.meta.env.LOCALE, import.meta.env.MODE)
 ---
 <BlogLayout {title} {description} {url}>
   <BlogList allPosts={allPosts} posts={allPosts} />
