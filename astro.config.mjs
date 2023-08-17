@@ -1,15 +1,15 @@
 import { defineConfig } from 'astro/config';
 import { loadEnv } from "vite";
 import mdx from '@astrojs/mdx';
+import { getLanguage, urls } from './src/i18n'
 
-const { LOCALE } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+const { LOCALE } = loadEnv(process.env.NODE_ENV, process.cwd(), '');
+const mode = import.meta.env.MODE
+const language = getLanguage(LOCALE)
 
-const site = `https://${LOCALE !== 'pt-BR' ? 'en.' : '' }guilhermenicolini.com.br`
-
-// https://astro.build/config
 export default defineConfig({
   integrations: [mdx()],
-  site,
+  site: urls[mode][language],
   markdown: {
     shikiConfig: {
       theme: 'dracula',

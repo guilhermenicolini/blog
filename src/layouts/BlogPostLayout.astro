@@ -14,7 +14,7 @@ const url = Astro.request.url
 
 <BlogLayout {title} {description} {url} >
   <div class="wrapper">
-    <BlogPost {title} {date} {description} {tags} {url}>
+    <BlogPost {title} {date} {description} {tags} {url} >
       <slot />
     </BlogPost>
   </div>

@@ -10,10 +10,11 @@ export interface Props {
   tags: string[]
 }
 
-const { title, date, description, tags } = Astro.props
+const { title, date, description, tags, url } = Astro.props
 
 const dateFormatter = formatDate(import.meta.env.LOCALE)
 
+console.log(import.meta.env.MODE, url)
 ---
 <article class="blog-post-header">
   <header>

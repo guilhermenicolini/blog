@@ -1,5 +1,5 @@
 import { PostModel, TagModel } from '@/models'
-import { getLanguage } from '@/i18n/utils'
+import { getLanguage } from '@/i18n'
 import { slugfy } from '@/utils'
 import { MDXInstance } from 'astro'
 

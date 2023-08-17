@@ -1,4 +1,4 @@
-import { getLanguage } from '@/i18n/utils'
+import { getLanguage } from '@/i18n'
 
 export const slugfy = (value: string): string => {
   const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
@@ -24,5 +24,3 @@ export const formatDate = (language: string = 'en-US'): Intl.DateTimeFormat => {
     day: 'numeric'
   })
 }
-
-// export const getLanguage = (language: string = 'en-US'): string => language === 'pt-BR' ? 'pt-BR' : 'en-US'

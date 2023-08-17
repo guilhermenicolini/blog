@@ -7,7 +7,7 @@
     "@typescript-eslint/consistent-type-imports": "off"
   },
   "overrides": [{
-    "files": ["*.astro"],
+    "files": ["**/*.astro"],
     "plugins": [
       "@typescript-eslint"
     ],

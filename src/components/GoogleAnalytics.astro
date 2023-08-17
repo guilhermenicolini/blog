@@ -1,10 +1,10 @@
 ---
-import { getLanguage } from '@/i18n/utils'
+import { languages, getLanguage } from '@/i18n'
 const language = getLanguage(import.meta.env.LOCALE)
 ---
 <!-- Google tag (gtag.js) -->
-{ language === 'pt-BR' && <script async src="https://www.googletagmanager.com/gtag/js?id=G-R1K2VTJXM1"></script> }
-{ language === 'pt-BR' &&
+{ language === languages.pt && <script async src="https://www.googletagmanager.com/gtag/js?id=G-R1K2VTJXM1"></script> }
+{ language === languages.pt &&
   <script is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -12,8 +12,8 @@ const language = getLanguage(import.meta.env.LOCALE)
     gtag('config', 'G-R1K2VTJXM1');
   </script>
 }
-{ language !== 'pt-BR' && <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYXCCR78FL"></script> }
-{ language !== 'pt-BR' &&
+{ language !== languages.pt && <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYXCCR78FL"></script> }
+{ language !== languages.pt &&
   <script is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
