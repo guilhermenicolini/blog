@@ -2,9 +2,547 @@
 layout: "@/layouts/BlogPostLayout.astro"
 language: pt
 title: "Meu setup Node.js + Typescript para backend"
-date: "2023-08-15"
-description: "Aprenda a configurar um ambiente completo para desenvolver seus projetos backends com NodeJS."
-tags: ["NodeJS", "Jest", "ESLint", "Typescript", "VSCode"]
+date: "2023-08-30"
+description: "Aprenda a configurar um ambiente completo para desenvolver seus projetos backends com Node.js."
+tags: ["Node.js", "Jest", "ESLint", "Typescript", "VSCode", "Husky"]
 slugs: { de: "2023-08/mein-setup-nodejs-typescript-fur-backend", en: "2023-08/my-setup-nodejs-typescript-for-backend" }
 ---
 ## Introdução
+
+Configurar um bom ambiente de desenvolvimento para backend com Node.js não é uma coisa tão trivial como muitos artigos mostram.
+Por isso, neste post vou fazer um passo-a-passo de como e por quê usar as configurações que uso, lembrando que é apenas a minha opinião baseada
+em minhas experiências.
+
+### Pré-requisitos
+
+#### NVM
+
+O <a href="https://github.com/nvm-sh/nvm" target="_blank">Node Version Manager</a> é essencial para gerenciar versões do node diferentes para
+cada projeto. Assim, para cada terminal aberto é possível usar uma versão diferente ao mesmo tempo. Disponível para todos os sistemas
+operacionais.
+
+#### Git
+
+O <a href="https://git-scm.com" target="_blank">Git</a> é essencial para gerenciar o código fonte dos seus projetos. Disponível para todos
+os sistemas operacionais.
+
+#### Visual Studio Code
+
+O <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> será o editor de código que usaremos. Disponível para todos
+os sistemas operacionais.
+
+### Configurando o Visual Studio Code
+
+#### Perfil
+
+Para começar iremos criar um perfil de desenvolvimento para o nosso setup:
+
+```
+  Manage > Profiles > Create Profile
+  Profile name: Backend (Node.js)
+  [x] Settings
+  [x] Keyboard Shortcuts
+  [x] User Snippets
+  [x] User Tasks
+  [x] Extensions
+  Create
+```
+
+#### Fonte
+
+<a href="https://github.com/tonsky/FiraCode" target="_blank">Fira Code</a>: fonte monoespaçada com ligaduras. Basta acessar o link, baixar e instalar em seu sistema operacional.
+
+Acesse o arquivo de configuração em File > Preferences > Settings > Open Settings (JSON) e adicione as seguintes linhas:
+
+```
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": 500,
+  "editor.fontSize": 16,
+  "editor.tabSize": 2
+```
+
+#### Formatação
+
+Acesse o arquivo de configuração em File > Preferences > Settings > Open Settings (JSON) e adicione as seguintes linhas:
+
+```
+  "editor.guides.bracketPairs": true,
+  "editor.renderWhitespace": "boundary",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": true }
+```
+
+#### Temas
+
+Acesse as extensões e adicione:
+- One Dark Pro (binaryfy)
+- Material Icon Theme (Philipp Kief)
+
+Acesse o arquivo de configuração em File > Preferences > Settings > Open Settings (JSON) e adicione as seguinte linha:
+
+```
+  "workbench.colorTheme": "One Dark Pro Darker",
+  "workbench.iconTheme": "material-icon-theme"
+```
+
+#### Outras configurações
+
+```
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "diffEditor.ignoreTrimWhitespace": false
+```
+
+#### Snippets
+
+Crie um snippet novo em:
+
+```
+  Manage > User Snippets > New Global Snippets file... New Snippets
+  Snippet name: Jest Snippets
+  Enter
+```
+
+Adicione o seguinte código:
+
+```
+{
+  "Jest Describe Template": {
+    "scope": "javascript, typescript",
+    "prefix": "describe",
+    "body": [
+      "describe('$1', () => {",
+      "  test('$2', () => {",
+      "  })",
+      "})",
+      ""
+    ]
+  },
+  "Jest Describe Async Template": {
+    "scope": "javascript, typescript",
+    "prefix": "describe-async",
+    "body": [
+      "describe('$1', () => {",
+      "  test('$2', async () => {",
+      "  })",
+      "})",
+      ""
+    ]
+  },
+  "Jest Test Template": {
+    "scope": "javascript, typescript",
+    "prefix": "test",
+    "body": [
+      "test('$2', () => {",
+      "})",
+      ""
+    ]
+  },
+  "Jest Test Async Template": {
+    "scope": "javascript, typescript",
+    "prefix": "test-async",
+    "body": [
+      "test('$2', async () => {",
+      "})",
+      ""
+    ]
+  }
+}
+```
+
+#### Extensões
+
+Acesse as extensões e adicione:
+- Draw.io Integration (Henning Dieterichs)
+- EditorConfig for VS Code (EditorConfig)
+- ESLint (Microsoft)
+
+### Projeto
+
+#### EditorConfig
+
+Crie um arquivo *.editorconfig* na raíz do projeto com o conteúdo:
+
+```
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+```
+
+Este arquivo normaliza mantém o estilo do código entre os vários editores e IDEs.
+
+#### NVMRC
+
+Crie um arquivo *.nvmrc* na raíz do projeto com o conteúdo:
+
+```
+  18.17.1
+```
+
+Este arquivo define a versão do node correta para o funcionamento do projeto. No momento da criação deste artigo, a versão do node era essa.
+
+#### Iniciar projeto
+
+```
+  npm init -y
+```
+
+#### Configurar Husky
+
+Instale o husky através do comando recomendado <a href="https://typicode.github.io/husky" target="_blank">aqui</a>:
+```
+  npx husky-init && npm install
+```
+
+Crie um arquivo *.gitignore* na raíz do projeto com o conteúdo:
+```
+  node_modules
+```
+
+Altere o script test do arquivo *package.json* para:
+```
+  "test": ""
+```
+
+Instale o git commit linter para padronizar as mensagens de commit:
+```
+  npm i -D git-commit-msg-linter
+```
+
+Crie um hook para o commit-msg:
+```
+  npx husky add .husky/commit-msg '.git/hooks/commit-msg $1'
+```
+
+#### Configurar Typescript
+
+```
+  npm i -D typescript ts-node-dev @types/node dotenv
+```
+
+Crie um arquivo *tsconfig.json* na raíz do projeto com o conteúdo:
+
+```
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDirs": [
+      "src",
+      "tests"
+    ],
+    "strict": true,
+    "target": "ES2021",
+    "module": "CommonJS",
+    "allowJs": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/tests/*": [
+        "../tests/*"
+      ],
+      "@/*": [
+        "*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "tests"
+  ]
+}
+```
+
+Esse arquivo configura o Typescript com algumas opções importantes:
+ - Define a pasta compilada para 'dist'
+ - Define o ES2021 como o ecmascript padrão
+ - Define duas pastas bases:
+   - src: arquivos fontes
+   - tests: arquivos para testes
+ - Define 2 alias de caminho:
+   - @: aponta para o diretório src/
+   - @/tests: aponta para o diretório tests/
+
+#### Configurar ESLint com JavaScript Standard Style
+
+Eu gosto do guia de estilo Standard, porém fique à vontade para usar outro ou nenhum. Só lembrando que quando temos um time de desenvolvimento, é bom usar algum estilo para
+a padronização do código.
+
+```
+  npm i -D eslint @typescript-eslint/eslint-plugin eslint-config-standard-with-typescript
+```
+
+Crie um arquivo *.eslintignore* na raíz do projeto com o conteúdo:
+
+```
+  node_modules
+```
+
+Crie um arquivo *.eslintrc.json* na raíz do projeto com o conteúdo:
+
+```
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": { }
+}
+```
+
+Esse arquivo define o Standard para funcionar com o Typescript.
+
+#### Configurar Jest
+
+```
+  npm i -D jest jest-mock-extended ts-jest @types/jest
+```
+
+Crie um arquivo *jest.config.js* na raíz do projeto com o conteúdo:
+
+```
+module.exports = {
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/index.ts',
+    '!**/*.d.ts'
+  ],
+  coverageDirectory: 'coverage',
+  testEnvironment: 'node',
+  reporters: ['default'],
+  coverageReporters: ['lcov', 'clover', 'text-summary', 'text', 'cobertura'],
+  moduleNameMapper: {
+    '@/tests/(.*)': '<rootDir>/tests/$1',
+    '@/(.*)': '<rootDir>/src/$1'
+  },
+  transform: {
+    '\\.ts$': 'ts-jest'
+  },
+  roots: [
+    '<rootDir>/src',
+    '<rootDir>/tests'
+  ],
+  clearMocks: true
+}
+```
+
+Esse arquivo configura o Jest com algumas opções importantes:
+ - Ignora a cobertura dos arquivos index.ts (geralmente usado para exportar módulos)
+ - Ignora a cobertura dos arquivos d.ts (arquivos de declaração de tipos)
+ - Mapeia o root @ para as respectivas pastas
+
+Crie um arquivo *jest.unit.config.js* na raíz do projeto com o conteúdo:
+
+```
+module.exports = {
+  ...require('./jest.config.js'),
+  testMatch: ['**/*.spec.ts']
+}
+```
+
+Este arquivo testa apenas arquivos do tipo spec.ts
+
+Crie um arquivo *jest.integration.config.js* na raíz do projeto com o conteúdo:
+
+```
+module.exports = {
+  ...require('./jest.config.js'),
+  testMatch: ['**/*.test.ts']
+}
+```
+
+Este arquivo testa apenas arquivos do tipo test.ts
+
+Adicione os seguintes scripts no arquivo *package.json*:
+
+```
+  "test": "jest --passWithNoTests --no-cache --runInBand",
+  "test:unit": "npm t -- --watch --config ./jest.unit.config.js",
+  "test:integration": "npm t -- --watch --config ./jest.integration.config.js",
+  "test:coverage": "npm t -- --coverage"
+```
+
+Adicione a pasta coverage nos arquivos *.gitignore* e *.eslintignore*
+```
+  node_modules
+  coverage
+```
+
+Crie um hook para o pre-push:
+```
+  npx husky add .husky/pre-push 'npm run test:coverage'
+```
+
+#### Configurar Lint Staged
+
+```
+  npm i -D lint-staged
+```
+
+Adicione o seguintes script no arquivo *package.json*:
+
+```
+  "test:staged": "npm t -- --findRelatedTests"
+```
+
+Crie um arquivo *.lintstagedrc.json* na raíz do projeto com o conteúdo:
+
+```
+{
+  "*.ts": [
+    "eslint 'src/** --fix",
+    "npm run test:staged"
+  ]
+}
+```
+
+Altere o arquivo *.husky/pre-commit* para:
+
+```
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+Esse arquivo irá formatar e rodar os testes relacionados aos arquivos em stage antes do commit
+
+#### Configurar Atualizações
+
+```
+  npm i -D npm-check-updates
+```
+
+Adicione o seguinte script no arquivo *package.json*:
+
+```
+  "update": "ncu --color --interactive && npm i"
+```
+
+Esse arquivo irá verificar se existem pacotes a serem atualizados.
+
+#### Depuração
+
+Crie um arquivo *.vscode/launch.json* com o conteúdo:
+
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Dev",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"]
+    }
+  ]
+}
+```
+
+Serão criadas duas tarefas. Basta colocar um breakpoint na linha desejada e executar:
+  - Debug Jest Tests: depuração em ambiente de testes
+  - Debug Dev: depuração em ambiente de desenvolvimento
+
+#### Build
+
+```
+  npm i module-alias
+  npm i -D @types/module-alias rimraf
+```
+
+Crie um arquivo *tsconfig-build.json* com o conteúdo:
+
+```
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "tests"
+  ]
+}
+```
+
+Esse arquivo irá ignorar todos os arquivos da pasta tests no momento da compilação
+
+Adicione a pasta dist nos arquivos *.gitignore* e *.eslintignore*
+```
+  node_modules
+  coverage
+  dist
+```
+
+Adicione o seguinte script no arquivo *package.json*:
+
+```
+  "build": "rimraf dist && tsc -p tsconfig-build.json"
+```
+
+### Aplicação Hello World
+
+Crie os seguintes arquivos dentro da pasta src do seu projeto:
+
+```
+// index.ts
+import './alias'
+import { hello } from '@/start'
+
+hello()
+```
+```
+// alias.ts
+import { addAlias } from 'module-alias'
+import { resolve } from 'path'
+
+addAlias('@', resolve(process.env.TS_NODE_DEV === 'true' ? 'src' : 'dist'))
+```
+```
+export const hello = (): void => {
+  console.log('Hello World!')
+}
+```
+
+Adicione os seguintes scripts no arquivo *package.json*:
+
+```
+  "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --clear -r dotenv/config src/index.ts",
+  "start": "node dist/index.js"
+```
+
+Para rodar a aplicação em modo desenvolvimento, execute:
+```
+  npm run dev
+```
+
+Para rodar a aplicação em modo produção, execute:
+```
+  npm run build && npm start
+```
+
+## Pronto! Agora você já tem seu ambiente de desenvolvimento configurado
+
+Todo o código fonte deste artigo pode ser encontrado em <a href="https://github.com/guilhermenicolini/setup-node-typescript">https://github.com/guilhermenicolini/setup-node-typescript</a>
