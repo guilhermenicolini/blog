@@ -5,6 +5,544 @@ title: "My setup Node.js + Typescript for backend"
 date: "2023-08-15"
 description: "Learn how to configure a complete environment to develop your NodeJS backend projects."
 tags: ["NodeJS", "Jest", "ESLint", "Typescript", "VSCode"]
-slugs: { de: "2023-08/mein-setup-nodejs-typescript-fur-backend", pt: "2023-08/meu-setup-nodejs-typescript-para-backend" }
+slugs: { pt: "2023-08/meu-setup-nodejs-typescript-para-backend" }
 ---
 ## Get Started
+
+Setup a good development environment for backend with Node.js is not a trivial thing like many posts shows. In this article, I'll do a step-by-step of how and why to use the settings
+that I use. But remember, this is my opinion based on my own experiences.
+
+### Prerequisites
+
+#### NVM
+
+<a href="https://github.com/nvm-sh/nvm" target="_blank">Node Version Manager (NVM)</a> is essential
+for managing different Node.js versions for each project. This allows you to use a different version for
+each open terminal simultaneously. It is available for all operating systems.
+
+#### Git
+
+<a href="https://git-scm.com" target="_blank">Git</a> is essential for managing the source code of
+your projects. It is available for all operating systems.
+
+#### Visual Studio Code
+
+<a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> will be the code editor
+we use. It is available for all operating systems.
+
+### Setup Visual Studio Code
+
+#### Profile
+
+To start, we will create a development profile for our setup:
+
+```
+  Manage > Profiles > Create Profile
+  Profile name: Backend (Node.js)
+  [x] Settings
+  [x] Keyboard Shortcuts
+  [x] User Snippets
+  [x] User Tasks
+  [x] Extensions
+  Create
+```
+
+#### Font
+
+<a href="https://github.com/tonsky/FiraCode" target="_blank">Fira Code</a>: A monospaced font with
+ligatures. Simply follow the link, download, and install it on your operating system.
+
+Access the configuration file at File > Preferences > Settings > Open Settings (JSON) and add the following lines:
+
+```
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": 500,
+  "editor.fontSize": 16,
+  "editor.tabSize": 2
+```
+
+#### Formatting
+
+Access the configuration file at File > Preferences > Settings > Open Settings (JSON) and add the following lines:
+
+```
+  "editor.guides.bracketPairs": true,
+  "editor.renderWhitespace": "boundary",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": true }
+```
+
+#### Themes
+
+Access extensions and add:
+ - One Dark Pro (binaryfy)
+ - Material Icon Theme (Philipp Kief)
+
+Access the configuration file at File > Preferences > Settings > Open Settings (JSON) and add the following line:
+
+```
+  "workbench.colorTheme": "One Dark Pro Darker",
+  "workbench.iconTheme": "material-icon-theme"
+```
+
+#### Other configurations
+
+```
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "diffEditor.ignoreTrimWhitespace": false
+```
+
+#### Snippets
+
+Create a new snippet at:
+
+```
+  Manage > User Snippets > New Global Snippets file... New Snippets
+  Snippet name: Jest Snippets
+  Enter
+```
+
+Add the following code:
+
+```
+{
+  "Jest Describe Template": {
+    "scope": "javascript, typescript",
+    "prefix": "describe",
+    "body": [
+      "describe('$1', () => {",
+      "  test('$2', () => {",
+      "  })",
+      "})",
+      ""
+    ]
+  },
+  "Jest Describe Async Template": {
+    "scope": "javascript, typescript",
+    "prefix": "describe-async",
+    "body": [
+      "describe('$1', () => {",
+      "  test('$2', async () => {",
+      "  })",
+      "})",
+      ""
+    ]
+  },
+  "Jest Test Template": {
+    "scope": "javascript, typescript",
+    "prefix": "test",
+    "body": [
+      "test('$2', () => {",
+      "})",
+      ""
+    ]
+  },
+  "Jest Test Async Template": {
+    "scope": "javascript, typescript",
+    "prefix": "test-async",
+    "body": [
+      "test('$2', async () => {",
+      "})",
+      ""
+    ]
+  }
+}
+```
+
+#### Extensions
+
+Access extensions and add:
+ - Draw.io Integration (Henning Dieterichs)
+ - EditorConfig for VS Code (EditorConfig)
+ - ESLint (Microsoft)
+
+### Project
+
+#### EditorConfig
+
+Create a *.editorconfig* file in the project's root with the following content:
+
+```
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+```
+
+This file standardizes code style across various editors and IDEs.
+
+#### NVMRC
+
+Create a *.nvmrc* file in the project's root with the content:
+
+```
+  18.17.1
+```
+
+This file specifies the correct Node.js version for the project to work. At the time of writing this article, this was the Node.js version.
+
+#### Start project
+
+```
+  npm init -y
+```
+
+#### Setup Husky
+
+Install Husky using the recommended command found <a href="https://typicode.github.io/husky" target="_blank">here</a>:
+```
+  npx husky-init && npm install
+```
+
+Create a *.gitignore* file in the project's root with the content:
+```
+  node_modules
+```
+
+Change the test script in the *package.json* file to:
+```
+  "test": ""
+```
+
+Install the git commit linter to standardize commit messages:
+```
+  npm i -D git-commit-msg-linter
+```
+
+Create a hook for commit-msg:
+```
+  npx husky add .husky/commit-msg '.git/hooks/commit-msg $1'
+```
+
+#### Setup Typescript
+
+```
+  npm i -D typescript ts-node-dev @types/node dotenv
+```
+
+Create a *tsconfig.json* file in the project's root with the content:
+
+```
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDirs": [
+      "src",
+      "tests"
+    ],
+    "strict": true,
+    "target": "ES2021",
+    "module": "CommonJS",
+    "allowJs": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/tests/*": [
+        "../tests/*"
+      ],
+      "@/*": [
+        "*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "tests"
+  ]
+}
+```
+
+This file configures Typescript with some important options:
+- Sets the compilation output directory to 'dist'
+- Sets ES2021 as the default ECMAScript target
+- Defines two base folders:
+  - src: source files
+  - tests: test files
+- Defines 2 path aliases:
+  - @: points to the src/ directory
+  - @/tests: points to the tests/ directory
+
+#### Setup ESLint with JavaScript Standard Style
+
+I prefer the Standard style guide, but feel free to use another one or none at all. Just remember that
+when you have a development team, it's good to use some style guide for code standardization.
+
+```
+  npm i -D eslint @typescript-eslint/eslint-plugin eslint-config-standard-with-typescript
+```
+
+Create a *.eslintignore* file in the project's root with the content:
+
+```
+  node_modules
+```
+
+Create a *.eslintrc.json* file in the project's root with the content:
+
+```
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": { }
+}
+```
+
+This file configures ESLint to work with Typescript.
+
+#### Setup Jest
+
+```
+  npm i -D jest jest-mock-extended ts-jest @types/jest
+```
+
+Create a *jest.config.js* file in the project's root with the content:
+
+```
+module.exports = {
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/index.ts',
+    '!**/*.d.ts'
+  ],
+  coverageDirectory: 'coverage',
+  testEnvironment: 'node',
+  reporters: ['default'],
+  coverageReporters: ['lcov', 'clover', 'text-summary', 'text', 'cobertura'],
+  moduleNameMapper: {
+    '@/tests/(.*)': '<rootDir>/tests/$1',
+    '@/(.*)': '<rootDir>/src/$1'
+  },
+  transform: {
+    '\\.ts$': 'ts-jest'
+  },
+  roots: [
+    '<rootDir>/src',
+    '<rootDir>/tests'
+  ],
+  clearMocks: true
+}
+```
+
+This file configures Jest with some important options:
+ - Ignores coverage for index.ts files (typically used to export modules)
+ - Ignores coverage for d.ts files (type declaration files)
+ - Maps the root @ to the respective folders
+
+Create a *jest.unit.config.js* file in the project's root with the content:
+
+```
+module.exports = {
+  ...require('./jest.config.js'),
+  testMatch: ['**/*.spec.ts']
+}
+```
+
+This file only tests spec.ts files.
+
+Create a *jest.integration.config.js* file in the project's root with the content:
+
+```
+module.exports = {
+  ...require('./jest.config.js'),
+  testMatch: ['**/*.test.ts']
+}
+```
+
+This file only tests test.ts files.
+
+Add the following scripts to the *package.json* file:
+
+```
+  "test": "jest --passWithNoTests --no-cache --runInBand",
+  "test:unit": "npm t -- --watch --config ./jest.unit.config.js",
+  "test:integration": "npm t -- --watch --config ./jest.integration.config.js",
+  "test:coverage": "npm t -- --coverage"
+```
+
+Add the coverage folder to the *.gitignore* and *.eslintignore* files:
+```
+  node_modules
+  coverage
+```
+
+Create a hook for pre-push:
+```
+  npx husky add .husky/pre-push 'npm run test:coverage'
+```
+
+#### Setup Lint Staged
+
+```
+  npm i -D lint-staged
+```
+
+Add the following script to the *package.json* file:
+
+```
+  "test:staged": "npm t -- --findRelatedTests"
+```
+
+Create a *.lintstagedrc.json* file in the project's root with the content:
+
+```
+{
+  "*.ts": [
+    "eslint 'src/** --fix",
+    "npm run test:staged"
+  ]
+}
+```
+
+Alter the *.husky/pre-commit* file to:
+
+```
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+This file formats and runs tests related to staged files before committing.
+
+#### Setup Updates
+
+```
+  npm i -D npm-check-updates
+```
+
+Add the following script to the *package.json* file:
+
+```
+  "update": "ncu --color --interactive && npm i"
+```
+
+This script checks for packages to update.
+
+#### Debugging
+
+Create a *.vscode/launch.json* file with the content:
+
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Dev",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"]
+    }
+  ]
+}
+```
+
+This creates two tasks. Simply place a breakpoint on the desired line and execute:
+ - Debug Jest Tests: Debugging in a test environment
+ - Debug Dev: Debugging in a development environment
+
+#### Build
+
+```
+  npm i module-alias
+  npm i -D @types/module-alias rimraf
+```
+
+Create a *tsconfig-build.json* file with the content:
+
+```
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "tests"
+  ]
+}
+```
+
+This file ignores all files in the tests folder during compilation.
+
+Add the dist folder to the *.gitignore* and *.eslintignore* files:
+```
+  node_modules
+  coverage
+  dist
+```
+
+Add the following script to the *package.json* file:
+
+```
+  "build": "rimraf dist && tsc -p tsconfig-build.json"
+```
+
+### Hello World Application
+
+Create the following files inside the src folder of your project:
+
+```
+// index.ts
+import './alias'
+import { hello } from '@/start'
+
+hello()
+```
+```
+// alias.ts
+import { addAlias } from 'module-alias'
+import { resolve } from 'path'
+
+addAlias('@', resolve(process.env.TS_NODE_DEV === 'true' ? 'src' : 'dist'))
+```
+```
+export const hello = (): void => {
+  console.log('Hello World!')
+}
+```
+
+Add the following scripts to the *package.json* file:
+
+```
+  "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --clear -r dotenv/config src/index.ts",
+  "start": "node dist/index.js"
+```
+
+To run the application in development mode, execute:
+```
+  npm run dev
+```
+
+To run the application in production mode, execute:
+```
+  npm run build && npm start
+```
+
+## Done! Now you have your development environment configured
+
+You can find all the source code for this article at <a href="https://github.com/guilhermenicolini/setup-node-typescript">https://github.com/guilhermenicolini/setup-node-typescript</a>

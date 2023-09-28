@@ -5,7 +5,7 @@ title: "Meu setup Node.js + Typescript para backend"
 date: "2023-08-30"
 description: "Aprenda a configurar um ambiente completo para desenvolver seus projetos backends com Node.js."
 tags: ["Node.js", "Jest", "ESLint", "Typescript", "VSCode", "Husky"]
-slugs: { de: "2023-08/mein-setup-nodejs-typescript-fur-backend", en: "2023-08/my-setup-nodejs-typescript-for-backend" }
+slugs: { en: "2023-08/my-setup-nodejs-typescript-for-backend" }
 ---
 ## Introdução
 
@@ -17,18 +17,18 @@ em minhas experiências.
 
 #### NVM
 
-O <a href="https://github.com/nvm-sh/nvm" target="_blank">Node Version Manager</a> é essencial para gerenciar versões do node diferentes para
+<a href="https://github.com/nvm-sh/nvm" target="_blank">Node Version Manager</a> é essencial para gerenciar versões do node diferentes para
 cada projeto. Assim, para cada terminal aberto é possível usar uma versão diferente ao mesmo tempo. Disponível para todos os sistemas
 operacionais.
 
 #### Git
 
-O <a href="https://git-scm.com" target="_blank">Git</a> é essencial para gerenciar o código fonte dos seus projetos. Disponível para todos
+<a href="https://git-scm.com" target="_blank">Git</a> é essencial para gerenciar o código fonte dos seus projetos. Disponível para todos
 os sistemas operacionais.
 
 #### Visual Studio Code
 
-O <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> será o editor de código que usaremos. Disponível para todos
+<a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> será o editor de código que usaremos. Disponível para todos
 os sistemas operacionais.
 
 ### Configurando o Visual Studio Code
@@ -75,8 +75,8 @@ Acesse o arquivo de configuração em File > Preferences > Settings > Open Setti
 #### Temas
 
 Acesse as extensões e adicione:
-- One Dark Pro (binaryfy)
-- Material Icon Theme (Philipp Kief)
+ - One Dark Pro (binaryfy)
+ - Material Icon Theme (Philipp Kief)
 
 Acesse o arquivo de configuração em File > Preferences > Settings > Open Settings (JSON) e adicione as seguinte linha:
 
@@ -152,9 +152,9 @@ Adicione o seguinte código:
 #### Extensões
 
 Acesse as extensões e adicione:
-- Draw.io Integration (Henning Dieterichs)
-- EditorConfig for VS Code (EditorConfig)
-- ESLint (Microsoft)
+ - Draw.io Integration (Henning Dieterichs)
+ - EditorConfig for VS Code (EditorConfig)
+ - ESLint (Microsoft)
 
 ### Projeto
 
@@ -417,7 +417,7 @@ Altere o arquivo *.husky/pre-commit* para:
 npx lint-staged
 ```
 
-Esse arquivo irá formatar e rodar os testes relacionados aos arquivos em stage antes do commit
+Esse arquivo irá formatar e rodar os testes relacionados aos arquivos em stage antes do commit.
 
 #### Configurar Atualizações
 
@@ -431,7 +431,7 @@ Adicione o seguinte script no arquivo *package.json*:
   "update": "ncu --color --interactive && npm i"
 ```
 
-Esse arquivo irá verificar se existem pacotes a serem atualizados.
+Esse script irá verificar se existem pacotes a serem atualizados.
 
 #### Depuração
 
@@ -466,8 +466,8 @@ Crie um arquivo *.vscode/launch.json* com o conteúdo:
 ```
 
 Serão criadas duas tarefas. Basta colocar um breakpoint na linha desejada e executar:
-  - Debug Jest Tests: depuração em ambiente de testes
-  - Debug Dev: depuração em ambiente de desenvolvimento
+ - Debug Jest Tests: depuração em ambiente de testes
+ - Debug Dev: depuração em ambiente de desenvolvimento
 
 #### Build
 
