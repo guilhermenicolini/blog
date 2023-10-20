@@ -1,0 +1,347 @@
+---
+layout: "@/layouts/BlogPostLayout.astro"
+language: en
+title: "Clean Architecture and Repositories with TypeScript"
+date: "2023-10-20"
+description: "Learn how to decouple and test your repositories using clean architecture."
+tags: ["Node.js", "Jest", "Typescript", "VSCode", "Docker", "MongoDb", "MSSQL", "MySQL", "Postgres", "MariaDB"]
+slugs: { pt: "2023-10/arquitetura-limpa-e-repositorios-com-typescript" }
+---
+## Get Started
+
+Decoupling the database access layer and testing it correctly requires some care to avoid pitfalls. In this post, I'll show you how
+to completely decouple your database from the business layer and provide several examples of how to change the database without
+impacting your entire application.
+
+But before we get into our implementation, it's important to test database access correctly because it ensures that your commands
+are correct. I'll list some questions you might be thinking about and explain the reasons for my choices.
+
+#### Why not mock the database access?
+Because when you mock, you force a return in your own way, which may not be exactly the same as what the driver uses, resulting
+in false positives in your tests.
+
+#### Why not use an in-memory database like pg-mem or shelf/jest-mongodb?
+
+Because these libraries don't keep up with driver update releases and also don't simulate 100% the same behavior. I've encountered
+errors using pg-mem with TypeORM, where a real database query returned correctly, but the test returned differently. So, as
+presented in this post, by using Docker, we can set up a real database for our tests and delete it at the end.
+
+#### What other issues have you encountered?
+
+Using the native driver, there are hardly any problems over time, but what I've noticed is with the use of TypeORM or another ORM.
+These libraries do not strictly follow the releases of new updates for native drivers, so there may be conflicts during updates,
+where npm will report that your ORM is not compatible with the latest version of the driver, forcing you to use an earlier version.
+What you should avoid is using different versions of the ORM and the native driver.
+
+### Prerequisites
+
+- <a href="https://en.guilhermenicolini.com.br/2023-08/my-setup-nodejs-typescript-for-backend" target="_blank">Properly configured environment</a>
+- <a href="https://docs.docker.com/engine/install" target="_blank">Docker</a>
+- <a href="https://docs.docker.com/compose/install" target="_blank">Docker Compose (V1)</a>
+
+### Proposed Solution
+
+<img src="/images/clean-architecture-repositories.png" />
+
+### Implementation
+
+#### Domain Layer
+
+Just for a very simple example, let's create a **User** model:
+```
+// src/domain/models/user.ts
+
+export interface User {
+  id: string
+  email: string
+  name: string
+  password: string
+}
+```
+To decouple the database access layer, we'll define an interface for connections:
+```
+// src/domain/gateways/connection.ts
+
+export interface IConnection<T> {
+  connect: () => Promise<void>
+  disconnect: () => Promise<void>
+  db: () => Promise<T>
+}
+```
+This interface has 3 methods:
+- connect: responsible for initiating the database connection
+- disconnect: responsible for disconnecting the database connection
+- db: responsible for returning the database connection instance
+
+Note that the interface is generic because each driver has its own instance.
+
+To decouple the repository, we'll define an interface responsible for returning a user by email:
+```
+// src/domain/gateways/user.ts
+
+import { User } from '@/domain/models/user'
+
+export interface FindUserByEmail {
+  findByEmail: (email: string) => Promise<User | undefined>
+}
+```
+This interface will be injected into your business rules.
+
+#### Infra Layer
+
+Let's now start a Singleton class to store all database connections. This is very useful if your application has more than one data source:
+```
+// src/infra/repositories/connections/data-sources.ts
+
+import { IConnection } from '@/domain/gateways/connection'
+
+export class DataSources {
+  private static instance?: DataSources
+  private dataSources: Record<string, IConnection<any>> = {}
+
+  private constructor () {}
+
+  static getInstance (): DataSources {
+    if (DataSources.instance === undefined) DataSources.instance = new DataSources()
+    return DataSources.instance
+  }
+
+  async add (name: string, connection: IConnection<any>): Promise<void> {
+    this.dataSources[name] = connection
+  }
+
+  async disconnect (): Promise<void> {
+    for (const ds of Object.values(this.dataSources)) {
+      await ds.disconnect()
+    }
+  }
+
+  async db (name: string): Promise<any> {
+    const conn = this.dataSources[name]
+    if (!conn) throw new Error('Data source not found')
+
+    return await conn.db()
+  }
+}
+```
+This class can only be accessed through the **getInstance** method, which will be the only reference to this
+class for the entire project. It stores all connections created using the **add** method. The **disconnect**
+method is responsible for closing all existing connections, and the **db** method is responsible for
+returning the connection client instance.
+
+Now, let's create a base repository class that will be used for all specific driver implementations:
+```
+// src/infra/repositories/repository.ts
+
+import { DataSources } from '@/infra/repositories/connections/data-sources'
+
+export abstract class Repository {
+  constructor (private readonly dataSources: DataSources = DataSources.getInstance()) {}
+
+  async getDb<T = any>(connection: string): Promise<T> {
+    return await this.dataSources.db(connection)
+  }
+}
+
+```
+This class has only one method, **getDb**, which is responsible for retrieving an existing connection by its name.
+
+#### Postgres
+
+To install the driver, run the command:
+```
+# npm i pg
+```
+Now, let's create the docker-compose file to set up a database for our tests:
+```
+version: "3.9"
+services:
+  postgres:
+    container_name: test-postgres
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+    ports:
+      - 5434:5432
+    volumes:
+      - ./scripts/postgres/script.sql:/docker-entrypoint-initdb.d/script.sql
+```
+To create our user table when starting Docker, let's create the script file:
+```
+// scripts/postgres/script.sql
+
+CREATE TABLE users (
+    id UUID NOT NULL,
+    email VARCHAR(256) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    password VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)
+);
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
+Now let's create the connection class that will manage the database:
+```
+// src/infra/repositories/connections/postgres-connection.ts
+
+import { Pool, PoolClient, PoolConfig } from 'pg'
+import { IConnection } from '@/domain/gateways/connection'
+
+export const postgresNativeOptions: PoolConfig = {
+  host: 'localhost',
+  port: 5434,
+  user: 'postgres',
+  password: 'P@ssw0rd',
+  database: 'postgres'
+}
+
+export class PostgresConnection implements IConnection<PoolClient> {
+  private source: PoolClient
+
+  constructor (private readonly config: PoolConfig) {}
+
+  async connect (): Promise<void> {
+    this.source = await new Pool(this.config).connect()
+  }
+
+  async disconnect (): Promise<void> {
+    this.source.release(true)
+  }
+
+  async db (): Promise<PoolClient> {
+    if (!this.source) await this.connect()
+    return this.source
+  }
+}
+```
+This file exports the connection for the test database and the connection class that implements the previously created interface.
+
+To complete the implementation of our architecture, let's create a class to retrieve our user by accessing Postgres:
+```
+// src/infra/repositories/postgres-native-repository.ts
+
+import { FindUserByEmail } from '@/domain/gateways/user'
+import { Repository } from './repository'
+import { PoolClient } from 'pg'
+import { User } from '@/domain/models/user'
+
+export class PostgresNativeRepository extends Repository implements FindUserByEmail {
+  async findByEmail (email: string): Promise<User | undefined> {
+    const repo = await this.getDb<PoolClient>('postgres-native')
+    const result = await repo
+      .query('SELECT id, email, name, password FROM users WHERE email = $1', [email])
+
+    if (result.rowCount === 0) return undefined
+
+    return result.rows[0]
+  }
+}
+```
+This class simply implements the user search interface, but note that it retrieves the connection called **postgres-native**
+from the global data source. After returning its instance, it executes the equivalent query.
+
+### Tests
+
+Let's now create a file to test all the access.
+```
+// tests/infra/repositories/postgres-native-repository.spec.ts
+
+import { PostgresNativeRepository } from '@/infra/repositories/postgres-native-repository'
+import { PoolClient } from 'pg'
+import { DataSources } from '@/infra/repositories/connections/data-sources'
+import { PostgresConnection, postgresNativeOptions } from '@/infra/repositories/connections/postgres-connection'
+
+describe('PostgresNativeRepository', () => {
+  let sut: PostgresNativeRepository
+  let client: PoolClient
+})
+```
+In this standard file, we define our System Under Test (SUT), which is our repository, and the auxiliary
+connection file that we will use shortly.
+
+We'll add the **beforeAll** method to set up our connection to the test database:
+```
+  beforeAll(async () => {
+    await DataSources.getInstance().add('postgres-native', new PostgresConnection(postgresNativeOptions))
+    client = await DataSources.getInstance().db('postgres-native')
+  })
+```
+This method will add a connection named **postgres-native** (matching our repository) using the settings for
+accessing the database created in the docker-compose and set the auxiliary variable.
+
+We'll also add the **afterAll** method:
+```
+  afterAll(async () => {
+    await DataSources.getInstance().disconnect()
+  })
+```
+At the end of all tests, it closes all connections to the databases, thus preventing memory leaks.
+
+Now, let's define the method to reset our database after each test:
+```
+  afterEach(async () => {
+    await client.query('DELETE FROM users')
+  })
+```
+
+Finally, before each test, we instantiate the repository. This prevents any changes to the repository
+made in a particular test from affecting subsequent tests:
+```
+  beforeEach(() => {
+    sut = new PostgresNativeRepository()
+  })
+```
+
+Let's test the return of a user not found in our first test:
+```
+  test('Should return no users', async () => {
+    const user = await sut.findByEmail('john.doe@inbox.me')
+    expect(user).toBeUndefined()
+  })
+```
+
+And finally, let's create a user and test their return:
+```
+  test('Should return correct output on success', async () => {
+    await client
+      .query('INSERT INTO users (id, email, name, password) VALUES (uuid_generate_v4(), $1, $2, $3)', ['john.doe@inbox.me', 'John Doe', 'hashed_password'])
+
+    const user = await sut.findByEmail('john.doe@inbox.me')
+    expect(user).toEqual({
+      id: expect.any(String),
+      email: 'john.doe@inbox.me',
+      name: 'John Doe',
+      password: 'hashed_password'
+    })
+  })
+```
+
+To run the tests, we need to create some scripts in the **package.json**:
+```
+  "up": "docker-compose up -d && sleep 15",
+  "down": "docker-compose down && docker-compose rm -f",
+  "pretest": "npm run up",
+  "posttest": "npm run down"
+```
+This way, when running any test script (unit, integration, coverage), it will automatically start the Docker
+containers, wait for 15 seconds (I had to include this because my machine took a while to start, and the
+tests ran before the databases were online), and after the tests, stop and remove the containers.
+
+### Final Thoughts
+
+In the way explained, I believe you can truly test your database. To help you further in this process,
+I've also created implementations and tests for:
+- MSSQL
+- MySQL
+- MariaDB
+- MongoDB
+- TypeORM
+
+Feel free to use it whenever you need.
+
+## Done! Now you have your repository completely decoupled from your business rules.
+
+You can find the entire source code of this article at <a href="https://github.com/guilhermenicolini/clean-architecture-repositories-with-typescript">https://github.com/guilhermenicolini/clean-architecture-repositories-with-typescript</a>
